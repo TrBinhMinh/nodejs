@@ -1,3 +1,5 @@
+const handleCastErrorDB = (err) => {};
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
