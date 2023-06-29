@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -39,14 +40,29 @@ const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: [],
+      defaultSrc: ["'self'", 'http://127.0.0.1:3000/*'],
       connectSrc: ["'self'", ...connectSrcUrls],
-      scriptSrc: ["'self'", ...scriptSrcUrls],
-      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      baseUri: ["'self'"],
       workerSrc: ["'self'", 'blob:'],
-      objectSrc: [],
       imgSrc: ["'self'", 'blob:', 'data:', 'https:'],
-      fontSrc: ["'self'", ...fontSrcUrls],
+      fontSrc: ["'self'", 'https:', 'data:', ...fontSrcUrls],
+      scriptSrc: [
+        "'self'",
+        'https://*.stripe.com',
+        'https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js',
+        'https://*.cloudflare.com',
+        ...scriptSrcUrls,
+      ],
+      frameSrc: ["'self'", 'https://*.stripe.com'],
+      objectSrc: ["'none'"],
+      styleSrc: [
+        "'self'",
+        'https:',
+        'unsafe-inline',
+        "'unsafe-inline'",
+        ...styleSrcUrls,
+      ],
+      upgradeInsecureRequests: [],
     },
   })
 );
@@ -66,6 +82,7 @@ app.use('/api', limiter);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -90,7 +107,7 @@ app.use(
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  // console.log(req.headers);
+  console.log(req.headers.cookie);
 
   next();
 });
