@@ -1,10 +1,11 @@
 import '@babel/polyfill';
-import { login } from './login';
+import { login, logout } from './login';
 import { displayMap } from './leaflet';
 
 // DOM ELEMENTS
 const map = document.getElementById('map');
 const loginForm = document.querySelector('.form');
+const logOutBtn = document.querySelector('.nav__el--logout');
 
 // VALUES
 
@@ -20,3 +21,5 @@ loginForm?.addEventListener('submit', (e) => {
   const password = document.getElementById('password')?.value;
   login(email, password);
 });
+
+logOutBtn?.addEventListener('click', logout);
