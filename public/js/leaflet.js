@@ -1,3 +1,4 @@
+/* eslint-disable */
 export const displayMap = (locations) => {
   var map = L.map('map', { zoomControl: false });
 
