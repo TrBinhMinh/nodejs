@@ -35,7 +35,7 @@ router.use(protect);
 
 router.patch('/updateMyPassword', udpatePassword);
 router.get('/me', getMe, getUser);
-router.patch('/updateMe', resizeUserPhoto, uploadUserPhoto, updateMe);
+router.patch('/updateMe', uploadUserPhoto, resizeUserPhoto, updateMe);
 router.delete('/deleteMe', deleteMe);
 
 router.use(restrictTo('admin'));

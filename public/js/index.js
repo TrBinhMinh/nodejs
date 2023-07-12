@@ -30,11 +30,10 @@ logOutBtn?.addEventListener('click', logout);
 updateUserForm?.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const formData = new FormData(updateUserForm);
-  const name = formData.get('name');
-  const email = formData.get('email');
+  const form = new FormData(updateUserForm);
+  form.append('photo', document.getElementById('photo'))
 
-  updateSettings({ name, email }, 'data');
+  updateSettings(form, 'data');
 });
 
 userPasswordForm?.addEventListener('submit', async (e) => {
