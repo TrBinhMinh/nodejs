@@ -2,6 +2,7 @@ import '@babel/polyfill';
 import { login, logout } from './login';
 import { displayMap } from './leaflet';
 import { updateSettings } from './udpateSettings';
+import { bookTour } from './stripe';
 
 // DOM ELEMENTS
 const map = document.getElementById('map');
@@ -9,6 +10,7 @@ const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const updateUserForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
+const bookBtn = document.getElementById('book-tour');
 
 // VALUES
 
@@ -31,7 +33,7 @@ updateUserForm?.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const form = new FormData(updateUserForm);
-  form.append('photo', document.getElementById('photo'))
+  form.append('photo', document.getElementById('photo'));
 
   updateSettings(form, 'data');
 });
@@ -56,3 +58,10 @@ userPasswordForm?.addEventListener('submit', async (e) => {
 
   userPasswordForm.reset();
 });
+
+if (bookBtn)
+  bookBtn.addEventListener('click', (e) => {
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
+  });
